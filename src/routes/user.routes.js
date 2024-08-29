@@ -6,14 +6,26 @@ import {
   findUserByIdCtrl,
   updateUserCtrl,
 } from "../controller/user.controllers.js";
+import {
+  createUserValidations,
+  idUserValidations,
+  updateUserValidations,
+} from "../validations/user.validation.js";
+import { applyValidations } from "../middlewares/validations.middlewares.js";
 
 const userRoutes = Router();
 
 userRoutes.get("/", allUsersCtrl);
-userRoutes.post("/", createUserCtrl);
+userRoutes.post("/", createUserValidations, applyValidations, createUserCtrl);
 
-userRoutes.get("/:id", findUserByIdCtrl);
-userRoutes.patch("/:id", updateUserCtrl);
-userRoutes.delete("/:id", deleteUserCtrl);
+userRoutes.get("/:id", idUserValidations, applyValidations, findUserByIdCtrl);
+userRoutes.patch(
+  "/:id",
+  updateUserValidations,
+  idUserValidations,
+  applyValidations,
+  updateUserCtrl
+);
+userRoutes.delete("/:id", idUserValidations, applyValidations, deleteUserCtrl);
 
 export { userRoutes };
